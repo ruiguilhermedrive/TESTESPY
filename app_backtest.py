@@ -114,7 +114,7 @@ class StrategyBacktester:
         
         return pd.DataFrame(data_dict, index=dates)
     
-    def calculate_variation(self):
+   def calculate_variation(self):
     """Calcular variação percentual diária"""
     self.data['pct_change'] = (
         (self.data['Close'] - self.data['Close'].shift(1)) / 
