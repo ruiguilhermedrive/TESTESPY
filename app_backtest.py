@@ -135,14 +135,16 @@ class StrategyBacktester:
                 exit_price = self.data['Close'].iloc[i]
                 retorno = ((exit_price - entry_price) / entry_price) * 100
                 
-                trade = {
-                    'data': current_date,
-                    'queda_trigger': prev_pct_change,
-                    'entrada_preco': entry_price,
-                    'saida_preco': exit_price,
-                    'retorno_percentual': retorno,
-                    'lucro': 1 if retorno > 0 else (-1 if retorno < 0 else 0)
-                }
+                retorno = float(retorno)
+
+trade = {
+    'data': current_date,
+    'queda_trigger': prev_pct_change,
+    'entrada_preco': entry_price,
+    'saida_preco': exit_price,
+    'retorno_percentual': retorno,
+    'lucro': 1 if retorno > 0 else (-1 if retorno < 0 else 0)
+}
                 
                 trades.append(trade)
         
