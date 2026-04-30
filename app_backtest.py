@@ -115,57 +115,59 @@ class StrategyBacktester:
         return pd.DataFrame(data_dict, index=dates)
     
     def calculate_variation(self):
-        """Calcular variação percentual diária"""
-        self.data['pct_change'] = (
-            (self.data['Close'] - self.data['Close'].shift(1)) / 
-            self.data['Close'].shift(1) * 100
-        )
-        return self.data
-    
-    def run_strategy(self, queda_percentual):
-        """Executar estratégia para um parâmetro"""
-        trades = []
-        
-        for i in range(1, len(self.data)):
-            current_date = self.data.index[i]
-            prev_pct_change = self.data['pct_change'].iloc[i]
-            
-            if prev_pct_change <= queda_percentual:
-                entry_price = self.data['Open'].iloc[i]
-                exit_price = self.data['Close'].iloc[i]
-                retorno = ((exit_price - entry_price) / entry_price) * 100
-                
-                retorno = float(retorno)
+    """Calcular variação percentual diária"""
+    self.data['pct_change'] = (
+        (self.data['Close'] - self.data['Close'].shift(1)) / 
+        self.data['Close'].shift(1) * 100
+    )
+    return self.data
 
-trade = {
-    'data': current_date,
-    'queda_trigger': prev_pct_change,
-    'entrada_preco': entry_price,
-    'saida_preco': exit_price,
-    'retorno_percentual': retorno,
-    'lucro': 1 if retorno > 0 else (-1 if retorno < 0 else 0)
-}
-                
-                trades.append(trade)
-        
-        return trades
+
+def run_strategy(self, queda_percentual):
+    """Executar estratégia para um parâmetro"""
+    trades = []
     
-    def calculate_metrics(self, trades):
-        """Calcular métricas de performance"""
-        if not trades:
-            return {
-                'total_trades': 0,
-                'acertos': 0,
-                'erros': 0,
-                'taxa_acerto': 0.0,
-                'taxa_erro': 0.0,
-                'maior_seq_acertos': 0,
-                'maior_seq_erros': 0,
-                'drawdown_maximo': 0.0,
-                'retorno_acumulado': 0.0,
-                'retorno_medio': 0.0,
-                'maior_ganho': 0.0,
-                'maior_perda': 0.0
+    for i in range(1, len(self.data)):
+        current_date = self.data.index[i]
+        prev_pct_change = self.data['pct_change'].iloc[i]
+        
+        if prev_pct_change <= queda_percentual:
+            entry_price = self.data['Open'].iloc[i]
+            exit_price = self.data['Close'].iloc[i]
+            retorno = ((exit_price - entry_price) / entry_price) * 100
+            
+            retorno = float(retorno)
+
+            trade = {
+                'data': current_date,
+                'queda_trigger': prev_pct_change,
+                'entrada_preco': entry_price,
+                'saida_preco': exit_price,
+                'retorno_percentual': retorno,
+                'lucro': 1 if retorno > 0 else (-1 if retorno < 0 else 0)
+            }
+            
+            trades.append(trade)
+    
+    return trades
+
+
+def calculate_metrics(self, trades):
+    """Calcular métricas de performance"""
+    if not trades:
+        return {
+            'total_trades': 0,
+            'acertos': 0,
+            'erros': 0,
+            'taxa_acerto': 0.0,
+            'taxa_erro': 0.0,
+            'maior_seq_acertos': 0,
+            'maior_seq_erros': 0,
+            'drawdown_maximo': 0.0,
+            'retorno_acumulado': 0.0,
+            'retorno_medio': 0.0,
+            'maior_ganho': 0.0,
+            'maior_perda': 0.0
             }
         
         df_trades = pd.DataFrame(trades)
